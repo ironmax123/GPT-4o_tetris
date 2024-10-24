@@ -1,5 +1,5 @@
 # GPT-4o_tetris
-私は何もコードを書かずにPythonのTKinterでテトリスを作成しました<br>
+コードを書かずにPythonのTKinterでテトリスを作成しました<br>
 コードは全てChatGPT-4oが作成しました<br>
 複数のプロンプトで作成されました
 
