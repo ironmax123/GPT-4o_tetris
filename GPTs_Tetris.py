@@ -179,6 +179,7 @@ class Tetris:
         if self.is_valid_position(self.current_tetromino, new_position):
             self.current_position = new_position
         self.draw_tetromino()
+        self.draw_prediction()
 
     def move_right(self, event):
         """右に移動"""
@@ -186,6 +187,7 @@ class Tetris:
         if self.is_valid_position(self.current_tetromino, new_position):
             self.current_position = new_position
         self.draw_tetromino()
+        self.draw_prediction()
 
     def move_down(self, event=None):
         """下に移動"""
@@ -197,6 +199,7 @@ class Tetris:
             self.clear_lines()
             self.new_tetromino()
         self.draw_tetromino()
+        self.draw_prediction()
 
     def rotate_tetromino(self, event):
         """ミノを回転"""
@@ -204,11 +207,13 @@ class Tetris:
         if self.is_valid_position(new_tetromino, self.current_position):
             self.current_tetromino = new_tetromino
         self.draw_tetromino()
+        self.draw_prediction()
 
     def hard_drop(self, event):
         """スペースキーで加速"""
         self.is_hard_drop_active = True  # フラグを立てる
         self.speed = FAST_SPEED  # 加速
+        self.draw_prediction()
 
     def draw_tetromino(self):
         """ミノを描画"""
@@ -241,6 +246,29 @@ class Tetris:
                         (x + 1) * BLOCK_SIZE, (y + 1) * BLOCK_SIZE,
                         fill=INACTIVE_BLOCK_COLOR
                     )
+    def draw_prediction(self):
+        """落下予想位置を描画"""
+        # 現在の位置を基にしてミノがどこに落下するかを計算
+        prediction_position = list(self.current_position)
+        
+        while self.is_valid_position(self.current_tetromino, [prediction_position[0] + 1, prediction_position[1]]):
+            prediction_position[0] += 1
+
+        # 予測位置を描画するために現状のキャンバスから "prediction" タグを削除
+        self.canvas.delete("prediction")
+
+        # 落下予想位置のミノを描画（予測位置用の色を指定）
+        for x, y in self.current_tetromino:
+            board_x = prediction_position[1] + x
+            board_y = prediction_position[0] + y
+            if board_y >= 0:
+                self.canvas.create_rectangle(
+                    board_x * BLOCK_SIZE, board_y * BLOCK_SIZE,
+                    (board_x + 1) * BLOCK_SIZE, (board_y + 1) * BLOCK_SIZE,
+                    outline="white",  # 枠線のみで表示
+                    tags="prediction"
+                )
+
 
     def update_game(self):
         """ゲームの進行"""
