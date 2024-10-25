@@ -1,7 +1,9 @@
 # GPT-4o_tetris
 コードを書かずにPythonのTKinterでテトリスを作成しました<br>
 コードは全てChatGPT-4oが作成しました<br>
-複数のプロンプトで作成されました
+複数のプロンプトで作成されました<br>
+py2appでmacアプリケーションにできるようにしました
+```pip install py2app```
 
 
 ## ゲームの説明
