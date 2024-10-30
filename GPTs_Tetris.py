@@ -284,24 +284,8 @@ class Tetris:
         self.canvas.create_text(BOARD_WIDTH * BLOCK_SIZE // 2, BOARD_HEIGHT * BLOCK_SIZE // 2,
                                 text="Game Over", fill="red", font=("Helvetica", 30))
 
-    def save_score(self):
-        """スコアをCSVに保存"""
-        file_name = "high_scores.csv"
-        if os.path.exists(file_name):
-            with open(file_name, mode='a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([self.score])
-        else:
-            with open(file_name, mode='w', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow(["Score"])
-                writer.writerow([self.score])
-
-        self.high_scores.append(self.score)
-        self.high_scores = sorted(self.high_scores, reverse=True)[:3]  # 上位3つだけ保持
-
     def load_high_scores(self):
-        """CSVからハイスコアを読み込み"""
+        """CSVからハイスコアを読み込み、上位3つだけを保持"""
         file_name = "high_scores.csv"
         if os.path.exists(file_name):
             with open(file_name, mode='r') as f:
@@ -309,6 +293,34 @@ class Tetris:
                 next(reader)  # ヘッダーをスキップ
                 for row in reader:
                     self.high_scores.append(int(row[0]))
+            # スコアを降順にソートして上位3つを保持
+            self.high_scores = sorted(self.high_scores, reverse=True)[:3]
+
+    def save_score(self):
+        """スコアをCSVに保存し、上位3つだけ保持"""
+        file_name = "high_scores.csv"
+        # CSVファイルにスコアを追加
+        if os.path.exists(file_name):
+            with open(file_name, mode='a', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow([self.score])
+        else:
+            with open(file_name, mode='w', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(["Score"])  # ヘッダー行
+                writer.writerow([self.score])
+
+        # スコアリストに新しいスコアを追加し、上位3つだけ保持
+        self.high_scores.append(self.score)
+        self.high_scores = sorted(self.high_scores, reverse=True)[:3]
+
+        # 上位3つのスコアのみをCSVファイルに再保存
+        with open(file_name, mode='w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(["Score"])  # ヘッダー行
+            for score in self.high_scores:
+                writer.writerow([score])
+
 
     def start_game(self, event=None):
         """ゲームをスタート"""
