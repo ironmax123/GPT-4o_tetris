@@ -16,7 +16,7 @@ DATA_FILES = [('',['high_scores.csv'])]
 # セットアップ
 setup(
     app=APP,
-    name='TETRIS For GPT',# アプリケーションの名前
+    name='GPT-TETRIS',# アプリケーションの名前
     data_files=DATA_FILES,
     options={'py2app': OPTIONS},
     setup_requires=['py2app'],
